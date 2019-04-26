@@ -231,9 +231,9 @@
   (interactive)
   (insert-translated-name-replace-symbol "camel"))
 
-(defun insert-translated-name-replace-with-space ()
+(defun insert-translated-name-replace-with-origin ()
   (interactive)
-  (insert-translated-name-replace-symbol "space"))
+  (insert-translated-name-replace-symbol "origin"))
 
 ;;;;;;;;;;;;;;;;;;;;; Helper functions ;;;;;;;;;;;;;;;;;;;;;
 (defun insert-translated-name-replace-symbol (style)
@@ -352,8 +352,6 @@
   (let ((words (split-string translation " ")))
     (cond ((string-equal style "line")
            (string-join (mapcar 'downcase words) "-"))
-          ((string-equal style "space")
-           (string-join words " "))
           ((string-equal style "underline")
            (string-join (mapcar 'downcase words) "_"))
           ((string-equal style "camel")
@@ -372,8 +370,9 @@
               (progn
                 ;; Insert result at placeholder point .
                 (goto-char placeholder-point)
-                (insert result)
-
+                (insert result);;added-to-buffer
+                ;; (move-end-of-line nil)
+                ;; (insert (concat " ;; " word))
                 ;; Remove placeholder from hash.
                 (remhash placeholder insert-translated-name-placeholder-hash))
             (message (format "Something wrong that we can't found placeholder for %s: %s" word translation))))))))
@@ -400,6 +399,8 @@
       )))
 
 (defun insert-translated-name-retrieve-translation (word style placeholder)
+  (comment-dwim nil)
+  (insert word)
   (cond ((string-equal insert-translated-name-translate-engine "youdao")
          (url-retrieve
           (insert-translated-name-youdao-build-url word)
