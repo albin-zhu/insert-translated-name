@@ -231,6 +231,10 @@
   (interactive)
   (insert-translated-name-replace-symbol "camel"))
 
+(defun insert-translated-name-replace-with-space ()
+  (interactive)
+  (insert-translated-name-replace-symbol "space"))
+
 ;;;;;;;;;;;;;;;;;;;;; Helper functions ;;;;;;;;;;;;;;;;;;;;;
 (defun insert-translated-name-replace-symbol (style)
   (let ((word (if (use-region-p)
@@ -348,6 +352,8 @@
   (let ((words (split-string translation " ")))
     (cond ((string-equal style "line")
            (string-join (mapcar 'downcase words) "-"))
+          ((string-equal style "space")
+           (string-join words " "))
           ((string-equal style "underline")
            (string-join (mapcar 'downcase words) "_"))
           ((string-equal style "camel")
