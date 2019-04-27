@@ -149,6 +149,10 @@
   "Face for keyword match."
   :group 'insert-translated-name)
 
+(defcustom add-comment nil
+  "whether-to-add-a-comment"                                    ;是否添加注释
+  :group 'insert-translated-name)
+
 (defvar insert-translated-name-origin-style-mode-list
   '(text-mode))
 
@@ -399,8 +403,11 @@
       )))
 
 (defun insert-translated-name-retrieve-translation (word style placeholder)
-  (comment-dwim nil)
-  (insert word)
+  (if add-comment
+      (progn
+        (comment-dwim nil)
+        (insert word)))
+
   (cond ((string-equal insert-translated-name-translate-engine "youdao")
          (url-retrieve
           (insert-translated-name-youdao-build-url word)
