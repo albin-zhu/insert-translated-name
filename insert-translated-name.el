@@ -247,7 +247,11 @@
     (if (use-region-p)
         (kill-region (region-beginning) (region-end))
       (kill-region (beginning-of-thing 'symbol) (end-of-thing 'symbol)))
-    (insert-translated-name-query-translation word style)))
+    (insert-translated-name-query-translation word style)
+    (if add-comment
+        (progn
+          (comment-dwim nil)
+          (insert word)))))
 
 (defun insert-translated-name-match-modes (mode-list)
   (cl-remove-if 'null (mapcar #'(lambda (mode) (derived-mode-p mode)) mode-list)))
@@ -403,11 +407,6 @@
       )))
 
 (defun insert-translated-name-retrieve-translation (word style placeholder)
-  (if add-comment
-      (progn
-        (comment-dwim nil)
-        (insert word)))
-
   (cond ((string-equal insert-translated-name-translate-engine "youdao")
          (url-retrieve
           (insert-translated-name-youdao-build-url word)
